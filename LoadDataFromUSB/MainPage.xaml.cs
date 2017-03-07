@@ -17,8 +17,8 @@ namespace LoadDataFromUSB
     {
         const string ImageDataPath = @"data\walkingtreelogo.jpg";
         const string VideoDataPath = @"data\b.mp4";
-        StorageManager manager { get; set; }
-        UserData LocalDataFolder { get; set; }
+        private UserData localDataFolder;
+        private string imagePath;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -28,7 +28,6 @@ namespace LoadDataFromUSB
         }
 
         public string VideoPath;
-        private string imagePath;
         public string ImagePath
         {
             get { return imagePath; }
@@ -43,8 +42,7 @@ namespace LoadDataFromUSB
         {
             InitializeComponent();
             DataContext = this;
-            manager = new StorageManager();
-            LocalDataFolder = manager.GetLocalStorageFolder();
+            localDataFolder = new StorageManager().GetLocalStorageFolder();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -55,15 +53,15 @@ namespace LoadDataFromUSB
             {
                 MessagingService.SubscribeToMessage<string>(this, "CopyData", sender =>
                 {
-                    ImagePath = Path.Combine(LocalDataFolder.Path, ImageDataPath);
-                    VideoPath = Path.Combine(LocalDataFolder.Path, VideoDataPath);
+                    ImagePath = Path.Combine(localDataFolder.Path, ImageDataPath);
+                    VideoPath = Path.Combine(localDataFolder.Path, VideoDataPath);
                     VideoView.Source = new Uri(VideoPath);
                 });
             }
             else
             {
-                ImagePath = Path.Combine(LocalDataFolder.Path, ImageDataPath);
-                VideoPath = Path.Combine(LocalDataFolder.Path, VideoDataPath);
+                ImagePath = Path.Combine(localDataFolder.Path, ImageDataPath);
+                VideoPath = Path.Combine(localDataFolder.Path, VideoDataPath);
                 VideoView.Source = new Uri(VideoPath);
             }
             Progress.IsActive = false;

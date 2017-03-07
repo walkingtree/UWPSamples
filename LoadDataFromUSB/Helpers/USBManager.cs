@@ -8,12 +8,20 @@ namespace LoadDataFromUSB.Helpers
 {
     class USBManager
     {
-        StorageManager manager = new StorageManager();
         const string PROMPTMESSAGE = "Please insert the USB drive that containing data and then press OK to continue";
         const string MESSAGE = "Please check if the USB drive has been inserted correctly and that it contains the files.";
         const int OK = 0;
         const int EXIT = 0;
         const int RETRY = 1;
+
+
+        private StorageManager manager;
+
+        public USBManager()
+        {
+            manager = new StorageManager();
+        }
+
         
         public async Task SetUpAppDataFromExternalStorrage()
         {
@@ -73,7 +81,6 @@ namespace LoadDataFromUSB.Helpers
         private async Task<bool> SetupLocalAppData(UserData fromFolder)
         {
             var isDoneSetUp = false;
-            //await SetUpProgressBar(fromFolder);
             var toFolder = ApplicationData.Current.LocalFolder;
             isDoneSetUp = await manager.SetupLocalAppData(fromFolder, new UserData { Path = toFolder.Path, Name = toFolder.Name });
             return isDoneSetUp;

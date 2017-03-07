@@ -7,7 +7,7 @@ namespace LoadDataFromUSB.Helpers
 {
     public class StorageManager
     {
-         const string Data = "data";
+        const string Data = "data";
         const string DataStoreFromUSB = "LoadDataFromUSB";
         
         public async Task<bool> IsDataAvailable()
