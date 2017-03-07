@@ -1,5 +1,7 @@
 ﻿using LoadDataFromUSB.Helpers;
+using LoadDataFromUSB.Model;
 using MessagingServiceExtension;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -15,26 +17,28 @@ namespace LoadDataFromUSB
     /// </summary>
     public sealed partial class MainPage : Page, INotifyPropertyChanged
     {
-        const string ImageDataPath = @"data\walkingtreelogo.jpg";
-        const string VideoDataPath = @"data\b.mp4";
-        private UserData localDataFolder;
-        private string imagePath;
+        const string DataFolder = @"data\";
+        const string JsonDataPath = @"userdata.json";
+        StorageManager Manager { get; set; }
+        UserData LocalDataFolder { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void RaisPropertyChanged(string propertyName)
+        public void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public string VideoPath;
+
+        private string imagePath;
         public string ImagePath
         {
             get { return imagePath; }
             set
             {
                 imagePath = value;
-                RaisPropertyChanged("ImagePath");
+                RaisePropertyChanged("ImagePath");
             }
         }
 
@@ -42,7 +46,7 @@ namespace LoadDataFromUSB
         {
             InitializeComponent();
             DataContext = this;
-            localDataFolder = new StorageManager().GetLocalStorageFolder();
+            LocalDataFolder = new StorageManager().GetLocalStorageFolder();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -53,18 +57,24 @@ namespace LoadDataFromUSB
             {
                 MessagingService.SubscribeToMessage<string>(this, "CopyData", sender =>
                 {
-                    ImagePath = Path.Combine(localDataFolder.Path, ImageDataPath);
-                    VideoPath = Path.Combine(localDataFolder.Path, VideoDataPath);
-                    VideoView.Source = new Uri(VideoPath);
+                    DisplayData();
                 });
             }
             else
-            {
-                ImagePath = Path.Combine(localDataFolder.Path, ImageDataPath);
-                VideoPath = Path.Combine(localDataFolder.Path, VideoDataPath);
-                VideoView.Source = new Uri(VideoPath);
-            }
+                DisplayData();
+
             Progress.IsActive = false;
+        }
+
+        private void DisplayData()
+        {
+            var JsonPath = Path.Combine(LocalDataFolder.Path, DataFolder, JsonDataPath);
+            var textFromJson = File.ReadAllText(JsonPath);
+            var data = JsonConvert.DeserializeObject<AppDetails>(textFromJson);
+
+            ImagePath = Path.Combine(LocalDataFolder.Path, DataFolder, data.ImageFile);
+            VideoView.Source = new Uri(Path.Combine(LocalDataFolder.Path, DataFolder, data.VideoFile));
+            TextView.Text = data.ApplicationName;
         }
     }
 }
