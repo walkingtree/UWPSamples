@@ -1,0 +1,39 @@
+﻿<Page
+    x:Class="LoadDataFromUSB.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LoadDataFromUSB"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <RelativePanel>
+            <TextBlock Name="TextView"
+                    FontSize="30"
+                    Margin="0,50,0,0"
+                    RelativePanel.AlignHorizontalCenterWithPanel="True"
+                    Text="Hello, Welcome!!"/>
+
+            <Image Name="ImageView"
+                    HorizontalAlignment="Center"
+                    RelativePanel.Below="TextView"
+                    RelativePanel.AlignHorizontalCenterWithPanel="True"
+                    Height="200" Width="200" Margin="0,30,0,0"
+                    Source="{Binding ImagePath, Mode=TwoWay}" />
+            
+            <ProgressRing IsActive="True" 
+                    RelativePanel.AlignVerticalCenterWithPanel="True" 
+                    RelativePanel.AlignHorizontalCenterWithPanel="True" 
+                    Height="50" Width="50" Name="Progress"/>
+            
+            <MediaElement x:Name="VideoView"
+                    RelativePanel.Below="ImageView"
+                    AreTransportControlsEnabled="True"
+                    RelativePanel.AlignHorizontalCenterWithPanel="True"
+                    Height="300" Width="500" Margin="0,30,0,0"/>
+
+        </RelativePanel>
+    </Grid>
+</Page>
