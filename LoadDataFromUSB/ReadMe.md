@@ -1,4 +1,4 @@
-In order to execute **LoadDataFromUSB** Project , Please copy following files from ( ) in a USB drive.
+In order to execute **LoadDataFromUSB** Project , Please copy following files from the folder ( **/LoadDataFromUSB/data** ) in a USB drive.
 
 When you build and run this LoadDataFromUSB application , it prompts with following message "Please insert the USB drive that containing data and then press OK to continue".
 
